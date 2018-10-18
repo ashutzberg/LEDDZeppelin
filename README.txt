@@ -62,17 +62,45 @@ and will be writen to /home/kristen/.ros/camera_info/camera.yaml
 http://wiki.ros.org/apriltags2_ros/Tutorials/Bundle%20calibration
 
 4. set April Tag settings
+inside config/settings.yaml
+change tag family to 'tag16h5'
+set publish_tf to true
+inside config/tags.yaml
+standalone_tags:
+  [
+    {id: 0, size: 0.168, name: "Tag 0"},
+    {id: 1, size: 0.168, name: "Tag 1"},
+    {id: 2, size: 0.168, name: "Tag 2"},
+    {id: 3, size: 0.168, name: "Tag 3"},
+    {id: 4, size: 0.168, name: "Tag 4"},
+    {id: 5, size: 0.168, name: "Tag 5"},
+    {id: 6, size: 0.168, name: "Tag 6"},
+    {id: 7, size: 0.168, name: "Tag 7"},
+  ]
 
-5. detection in a video stream
-http://wiki.ros.org/apriltags2_ros/Tutorials/Detection%20in%20a%20video%20stream
-be already running the opencv video stream node
+5. to run the classifier with the video stream
+have the opencv video stream already running
+to run the detector in the apriltags_ws:
+roslaunch apriltags2_ros continuous_detection.launch
 
-Running the April Tags ROS Nodes
+use /tag_detections_image to see image with tag highlighted
+use /tf to get detected tag and tag bundle poses
 
-Running the Matlab ROS Nodes
+install rviz
+http://wiki.ros.org/rviz/UserGuide
+
+to run rviz:
+rosrun rviz rviz
+
+
+6. Running the Matlab ROS Nodes
 - wait until topics, listen to topic, translate data if necessary (Eric)
 
-Linking the April Tags and Matlab Nodes Together
+7. Linking the April Tags and Matlab Nodes together
+Running the April Tags ROS Nodes
+
+
+
 
 
 Extra Information

@@ -61,10 +61,24 @@ and will be writen to /home/kristen/.ros/camera_info/camera.yaml
 3. dont need to do bundle calibration since dont plan to have more than one tag visible in the camera frame at any time
 http://wiki.ros.org/apriltags2_ros/Tutorials/Bundle%20calibration
 
-4. set April Tag settings
+4. might need intermediate image_proc node to rectify the image
+already have image_proc from setting up image_pipeline ws
+https://github.com/ros-perception/image_pipeline
+to run, go to image_pipeline_ws:
+ROS_NAMESPACE=camera rosrun image_proc image_proc
+to view the rectified image in a separate terminal, set up rqt_image_view ws:
+https://github.com/ros-visualization/rqt_image_view
+run:
+rosrun rqt_image_view rqt_image_view
+
+cant use the image_pipeline image_view due to opencv issue
+https://github.com/ros-perception/image_pipeline/issues/201
+
+5. set April Tag settings
 inside config/settings.yaml
 change tag family to 'tag16h5'
 set publish_tf to true
+
 inside config/tags.yaml
 standalone_tags:
   [
@@ -78,29 +92,55 @@ standalone_tags:
     {id: 7, size: 0.168, name: "Tag 7"},
   ]
 
-5. to run the classifier with the video stream
-have the opencv video stream already running
+inside continuous_detection.launch
+<launch>
+  <arg name="launch_prefix" default="" /> <!-- set to value="gdbserver localhost:10000" for remote debugging -->
+  <arg name="node_namespace" default="apriltags2_ros_continuous_node" />
+  <arg name="camera_name" default="/camera" />
+  <arg name="camera_frame" default="camera" />
+  <arg name="image_topic" default="image_rect" />
+
+  <!-- Set parameters -->
+  <rosparam command="load" file="$(find apriltags2_ros)/config/settings.yaml" ns="$(arg node_namespace)" />
+  <rosparam command="load" file="$(find apriltags2_ros)/config/tags.yaml" ns="$(arg node_namespace)" />
+  
+  <node pkg="apriltags2_ros" type="apriltags2_ros_continuous_node" name="$(arg node_namespace)" clear_params="true" output="screen" launch-prefix="$(arg launch_prefix)" >
+    <!-- Remap topics from those used in code to those on the ROS network -->
+    <remap from="image_rect" to="$(arg camera_name)/$(arg image_topic)" />
+    <remap from="camera_info" to="$(arg camera_name)/camera_info" />
+
+    <param name="camera_frame" type="str" value="$(arg camera_frame)" />
+    <param name="publish_tag_detections_image" type="bool" value="true" />      <!-- default: false -->
+  </node>
+</launch>
+
+6. to run the classifier with the video stream
+have the opencv video stream and the image_proc already running
 to run the detector in the apriltags_ws:
 roslaunch apriltags2_ros continuous_detection.launch
+if it cant find apriltags2_ros run:
+source devel/setup.bash
 
 use /tag_detections_image to see image with tag highlighted
 use /tf to get detected tag and tag bundle poses
 
-install rviz
+Important: Make sure that you print yours tags surrounded by at least a 1 bit wide white border. The core AprilTag 2 algorithm samples this surrounding white border for creating a light model over the tag surface so do not e.g. cut or print the tags out flush with their black border. 
+
+install rviz. should be installed with ros melodic
 http://wiki.ros.org/rviz/UserGuide
 
 to run rviz:
 rosrun rviz rviz
 
 
-6. Running the Matlab ROS Nodes
+7. Running the Matlab ROS Nodes
 - wait until topics, listen to topic, translate data if necessary (Eric)
 
-7. Linking the April Tags and Matlab Nodes together
+8. Linking the April Tags and Matlab Nodes together
 Running the April Tags ROS Nodes
 
-
-
+9. april tags simulation?
+https://github.com/xenobot-dev/apriltags_ros
 
 
 Extra Information

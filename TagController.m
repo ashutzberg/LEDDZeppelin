@@ -1,9 +1,15 @@
-% PID loop ...
-%Inputs: Yaw, Range
-%
+
+function TagController(yaw,distance,height)
+% Yaw is angle in x-y given from ROS (blimp to tag)
+% distance is the range displacement from blimp to tag in the x-y plane given from ROS
+% height is the vertical displacement from blimp to tag given from ROS
+
 V2thrust = 1/127 * (3.8) * (2) * 1 / 116.59; % Thrust converting factor
 d2r=pi/180;
 dt=0.111;
+s1 = '$01'; s2 = ',SETM,'; b = ',';
+
+set_point_distance=0.5;
 
 % Initial Values
 x_cal=0;
@@ -34,23 +40,22 @@ Kd_yaw=0.3840;
 Kp_dist=0.0125;
 Ki_dist=1.0472e-04;
 Kd_dist=0.0658;
-while(1) % give this an actual reason
 
-range = distanceToCam;              % Input from ROS
-
-center_frame_z = 240;               % Center frame in Z
-blimp_tag_z = mean(bboxPoints(:,2)); % Input Z height from ROS
+while(1)
+range = distance;              % Input from ROS
+zdisp = height;               % Input Z height from ROS
+yaw = yaw;                      %Input from ROS
 
 % Calculate yaw
-yaw = asin((center_face_x - center_frame_x)*ratio/range)/pi*180; % input from ROS
-yaw = -yaw;
+reference_yaw = pi;
 
 % Height of Tag in meters
-h_tag = 2.45;
+zdisp = height;
+h_tag = 2.45;           % the average height of the tag will be 8 feet, or about 2.45 meters
 reference_z = h_tag;
-reference_yaw = 0;
+
 % Height of blimp in meters
-h_blimp = ratio*(blimp_tag_z - center_frame_z) + h_tag;
+h_blimp = zdisp + h_tag;
 
 
 
@@ -64,7 +69,7 @@ end
 prev_error_z=error_z;%update error_z
 
 % PID for Yaw
-error_yaw = calc_yaw_error(reference_yaw,yaw)*d2r;
+error_yaw = reference_yaw - yaw; % calc_yaw_error(reference_yaw,yaw)*d2r; so hopefully ROS team will give us angle of tag relative to blimp
 [thrust_yaw,thrust_i_yaw] = PIDcontroller(Kp_yaw,Ki_yaw,Kd_yaw,error_yaw,prev_error_yaw,thrust_i_yaw,dt);
 thrust_yaw = thrust_yaw /V2thrust;
 prev_error_yaw=error_yaw;%update previous yaw_error
@@ -106,13 +111,19 @@ end
 if (right_PWM<0)
 right_PWM=0;
 end
+if (thrust_z_PWM<0)
+thrust_z_PWM=0;
+end
+if (thrust_z_PWM>511)
+thrust_z_PWM=511;
+end
+
 % Send commands
 t = int2str(thrust_z_PWM); l = int2str(left_PWM); r = int2str(right_PWM);
-side = int2str(thrust_side);
-cmd = strcat(s1,s2,l,b,r,b,t,b,t,b,side,b,'255');
-fprintf(blimp,cmd);
-oldPoints = visiblePoints;
-setPoints(pointTracker, oldPoints);
-
+%side = int2str(thrust_side);
+cmd = strcat(s1,s2,l,b,r,b,t,b,t,b,'255',b,'255') % this is the command to feed the arduino controller ...
+% fprintf(blimp,cmd);
+% oldPoints = visiblePoints;
+% setPoints(pointTracker, oldPoints);
 end
 end

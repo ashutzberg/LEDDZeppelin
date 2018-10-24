@@ -143,6 +143,21 @@ Running the April Tags ROS Nodes
 https://github.com/xenobot-dev/apriltags_ros
 
 
+Everything set up
+in apriltags_ws
+roslaunch apriltags2_ros continuous_detection.launch
+in image_transport_ws
+roslaunch video_stream_opencv camera.launch
+in image_pipeline_ws
+ROS_NAMESPACE=camera rosrun image_proc image_proc
+in rqt_image_view_ws
+rosrun rqt_image_view rqt_image_view
+in usb_cam_ws
+roslaunch usb_cam usb_cam-test.launch
+in 
+
+
+
 Extra Information
 how to run ros
 http://wiki.ros.org/rosbash#rosrun
@@ -158,3 +173,4 @@ roslaunch apriltags2_ros single_image_client.launch image_load_path:=<FULL PATH 
 how to run classifier continuously
 http://wiki.ros.org/apriltags2_ros/Tutorials/Detection%20in%20a%20video%20stream
 roslaunch apriltags2_ros continuous_detection.launch
+

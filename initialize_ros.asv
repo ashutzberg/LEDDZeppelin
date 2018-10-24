@@ -1,3 +1,5 @@
+function [tag_x, tag_y, tag_z, tag_pitch, tag_yaw, tag_roll] = image_classifier(
+
 rosshutdown
 rosinit('http://localhost:11311');
 tf_sub = rossubscriber('/tf');

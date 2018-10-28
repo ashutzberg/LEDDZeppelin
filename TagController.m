@@ -1,5 +1,5 @@
 
-function TagController(yaw,distance,height)
+function TagController(tfSub)
 % Yaw is angle in x-y given from ROS (blimp to tag)
 % distance is the range displacement from blimp to tag in the x-y plane given from ROS
 % height is the vertical displacement from blimp to tag given from ROS
@@ -42,9 +42,12 @@ Ki_dist=1.0472e-04;
 Kd_dist=0.0658;
 
 while(1)
-range = distance;              % Input from ROS
-zdisp = height;               % Input Z height from ROS
-yaw = yaw;                      %Input from ROS
+ 
+[tagX, tagY, tagZ, tagYaw, tagLabels] = getTagPose(tfSub)
+
+range = sqrt(tagX^2 + tagY^2);              % Input from ROS
+zdisp = tagZ;               % Input Z height from ROS
+yaw = tagYaw;                      %Input from ROS
 
 % Calculate yaw
 reference_yaw = pi;

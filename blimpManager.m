@@ -8,13 +8,14 @@ target_destination = 1
 
 % call classifier
 
-[tagX, tagY, tagZ, tagYaw, tagLabels] = getTagPose(tfSub)
+[tagX, tagY, tagZ, tagYaw, tagLabel] = getTagPose(tfSub)
 pause(2)
 
-% if no tags within vicinity
-while labLabels(1) == -1 && tagLabels(2) == -1
+% if no tags within vicinity, limit to number of attempts to poll
+% surroundings before starting spiral pattern
+while tagLabel == -1
     % turn blimp in increasing spiral to increase chance of detecting tag
-    [tagX, tagY, tagZ, tagYaw, tagLabels] = getTagPose(tfSub)
+    [tagX, tagY, tagZ, tagYaw, tagLabel] = getTagPose(tfSub)
 end
 
 % call localization script
@@ -24,9 +25,9 @@ end
 [x,y,thetaglobal] = blimpLocalization(xTagtoBlimp,yTagtoBlimp,thetaTagtoBlimp,sigmaSensor);
 
 % if correct tag is within camera frame
-if tagLables(1) == target_destination
+if tagLable == target_destination
     
-elseif tagLables(2) == target_destination
+elseif tagLable != target_destination
     
 % if only incorrect tag is in camera frame
 % based on global position, correct to point camera at destination tag

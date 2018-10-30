@@ -1,3 +1,5 @@
+function[destination_tag] = VoicePollingScript()
+
 %Get a Recording
 recObj = audiorecorder
 disp('Start speaking.')
@@ -29,20 +31,20 @@ elseif (strcmpi(words.TRANSCRIPT, 'left'))
 elseif (strcmpi(words.TRANSCRIPT, 'right'))
     val = 100
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag zero'))
-    navigate(0)
+    return 0
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag one'))
-    navigate(1)
+    return 1
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag two'))
-    navigate(2)
+    return 2
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag three'))
-    navigate(3)
+    return 3
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag four'))
-    navigate(4)
+    return 4
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag five'))
-    navigate(5)
+    return 5
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag six'))
-    navigate(6)
+    return 6
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag seven'))
-    navigate(7)
+    return 7
 end
 % Do Task A

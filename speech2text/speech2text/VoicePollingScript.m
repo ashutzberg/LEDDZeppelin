@@ -1,4 +1,4 @@
-function[destination_tag] = VoicePollingScript()
+function[val, destination_tag] = VoicePollingScript()
 
 %Get a Recording
 recObj = audiorecorder

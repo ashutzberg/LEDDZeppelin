@@ -28,5 +28,19 @@ elseif (strcmpi(words.TRANSCRIPT, 'left'))
     val = 97
 elseif (strcmpi(words.TRANSCRIPT, 'right'))
     val = 100
+elseif (strcmpi(words.TRANSCRIPT, 'go to tag one'))
+    navigate(1)
+elseif (strcmpi(words.TRANSCRIPT, 'go to tag two'))
+    navigate(2)
+elseif (strcmpi(words.TRANSCRIPT, 'go to tag three'))
+    navigate(3)
+elseif (strcmpi(words.TRANSCRIPT, 'go to tag four'))
+    navigate(4)
+elseif (strcmpi(words.TRANSCRIPT, 'go to tag five'))
+    navigate(5)
+elseif (strcmpi(words.TRANSCRIPT, 'go to tag six'))
+    navigate(6)
+elseif (strcmpi(words.TRANSCRIPT, 'go to tag seven'))
+    navigate(7)
 end
 % Do Task A

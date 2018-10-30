@@ -31,20 +31,20 @@ elseif (strcmpi(words.TRANSCRIPT, 'left'))
 elseif (strcmpi(words.TRANSCRIPT, 'right'))
     val = 100
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag zero'))
-    return 0
+    destination_tag = 0;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag one'))
-    return 1
+    destination_tag = 1;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag two'))
-    return 2
+    destination_tag = 2;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag three'))
-    return 3
+    destination_tag = 3;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag four'))
-    return 4
+    destination_tag = 4;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag five'))
-    return 5
+    destination_tag = 5;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag six'))
-    return 6
+    destination_tag = 6;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag seven'))
-    return 7
+    destination_tag = 7;
 end
 % Do Task A

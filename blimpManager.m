@@ -1,7 +1,7 @@
 function [] = blimpManager(voice_destination)
 
 % call speech recognition code and decipher the user's destination
-target_destination = voice destination;
+[immidiate_command, target_destination] = VoicePollingScript()
 
 % initialize Ros
 [tfSub, imageSub] = initializeRos();

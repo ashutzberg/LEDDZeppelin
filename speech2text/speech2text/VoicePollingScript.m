@@ -1,4 +1,7 @@
 function[val, destination_tag] = VoicePollingScript()
+% if val = 0; then blimp doesn't move;
+% if val = 1; then blimp runs "go to tag" function.
+% if val = #; then blimp does appropriate "val" command.
 
 %Get a Recording
 recObj = audiorecorder
@@ -32,19 +35,26 @@ elseif (strcmpi(words.TRANSCRIPT, 'right'))
     val = 100
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag zero'))
     destination_tag = 0;
+    val = 1;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag one'))
     destination_tag = 1;
+    val = 1;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag two'))
     destination_tag = 2;
+    val = 1;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag three'))
     destination_tag = 3;
+    val = 1;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag four'))
     destination_tag = 4;
+    val = 1;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag five'))
     destination_tag = 5;
+    val = 1;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag six'))
     destination_tag = 6;
 elseif (strcmpi(words.TRANSCRIPT, 'go to tag seven'))
     destination_tag = 7;
+    val = 1;
 end
 % Do Task A

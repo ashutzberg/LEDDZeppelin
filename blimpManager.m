@@ -1,4 +1,4 @@
-function [] = blimpManager()
+function [] = blimpManager(voice_destination)
 
 % call speech recognition code and decipher the user's destination
 [immidiate_command, target_destination] = VoicePollingScript()

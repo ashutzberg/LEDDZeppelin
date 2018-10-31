@@ -1,12 +1,19 @@
-function [x,y,thetaglobal] = blimpLocalization(xTagtoBlimp,yTagtoBlimp,thetaTagtoBlimp,sigmaSensor);
+function [x,y,thetaglobal] = blimpLocalization(detectedTag,tagLocs,sigmaSensor)
+%function [x,y,thetaglobal] = blimpLocalization(xTagtoBlimp,yTagtoBlimp,thetaTagtoBlimp,sigmaSensor);
 % good input choices would be
 % x = 50*sqrt(2), y = 0, rtheta = -3*pi/4, sigmaSensor = 2
 % [x,y,theta]
 
+xTagtoBlimp = detectedTag.x;
+yTagtoBlimp = detectedTag.y;
+thetaTagtoBlimp = detectedTag.yaw;
+number = detectedTag.number;
+
 %knowns
-thetatg1 = -pi/2;  % theta of the tag relative to the global frame
-xtg1 = 100;        % x-coordinate of tag 1
-ytg1 = 100;        % y-coordinate of tag 1
+tagPose = tagLocs(number + 1);
+thetatg1 = tagPose(3); % -pi/2;  % theta of the tag relative to the global frame
+xtg1 = tagPose(1);     % x-coordinate of tag 1
+ytg1 = tagPose(2);     % y-coordinate of tag 1
 
 sigma = sigmaSensor;
 % sensor readings

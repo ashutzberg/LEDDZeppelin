@@ -3,6 +3,16 @@ function TagController
 % Yaw is angle in x-y given from ROS (blimp to tag)
 % distance is the range displacement from blimp to tag in the x-y plane given from ROS
 % height is the vertical displacement from blimp to tag given from ROS
+
+
+
+
+% Object Creaation
+blimp = serial('COM3','BaudRate',19200,'InputBufferSize',4096);
+% Serial communication initialization
+fopen(blimp);
+
+%Initialize ROS
 [tfSub,imageSub] = initializeROS();
 
 V2thrust = 1/127 * (3.8) * (2) * 1 / 116.59; % Thrust converting factor
@@ -137,7 +147,7 @@ end
 t = int2str(thrust_z_PWM); l = int2str(left_PWM); r = int2str(right_PWM);
 %side = int2str(thrust_side);
 cmd = strcat(s1,s2,l,b,r,b,t,b,t,b,'255',b,'255') % this is the command to feed the arduino controller ...
-% fprintf(blimp,cmd);
+fprintf(blimp,cmd);
 % oldPoints = visiblePoints;
 % setPoints(pointTracker, oldPoints);
 end

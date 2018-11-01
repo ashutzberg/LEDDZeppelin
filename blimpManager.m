@@ -1,4 +1,4 @@
-function [] = blimpManager(voice_destination)
+function [] = blimpManager()
 
 % open connection to blimp
 close all
@@ -96,11 +96,9 @@ else
     % start turning the blimp
     % keep calling the classifier and turning until the destination tag is
     % within the frame
+    % then call controls code to go to tag
         
 end
-
-% call controls (potentially grab image?)
-% controls calls classifier to correct navigation
 
 % shutdown ros
 rosshutdown

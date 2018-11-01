@@ -1,4 +1,4 @@
-function [] = blimpManager(voice_destination)
+function [] = scenario2()
 
 % open connection to blimp
 close all
@@ -67,18 +67,30 @@ end
 
 %if tag is located left or right
 margin = 0; %specify error margin
-while abs(tagX) != margin || abs(tagY) != margin   
-    if tagX < -1.*margin %tag left
+Zmargin = 5; %specify dist to tag goal
+while (abs(tagX) ~= margin || abs(tagY) ~= margin) && tagZ < Zmargin
+    if tagX < -1*margin %tag left
         fprintf(blimp,'$01,SETM,200,300,255,255,255,255');%move left
-    else if tagX > margin %tag right
+    elseif tagX > margin %tag right
         fprintf(blimp,'$01,SETM,300,200,255,255,255,255');%move right
     end
     [tagX, tagY, tagZ, tagYaw, tagLabel] = getTagPose(tfSub); %refresh after move
 
-    if tagY < -1.*margin %tag down
+    if tagY < -1*margin %tag down
         fprintf(blimp,'$01,SETM,255,255,200,200,255,255');%move down
-    else if tagY > margin %tag up
+    elseif tagY > margin %tag up
         fprintf(blimp,'$01,SETM,255,255,300,300,255,255');%move up
+    end
+    [tagX, tagY, tagZ, tagYaw, tagLabel] = getTagPose(tfSub); % refresh after move
+    if (abs(tagX) == margin || abs(tagY) == margin) && tagZ < Zmargin
+        tic;
+        t = toc;
+        % go forward for 2 second
+        while t < 2
+            fprintf(blimp,'$01,SETM,300,300,255,255,255,255');
+            t = toc;
+        end
+        tic;
     end
     [tagX, tagY, tagZ, tagYaw, tagLabel] = getTagPose(tfSub); % refresh after move
 end

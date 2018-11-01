@@ -23,7 +23,7 @@ Calibration
 https://github.com/ros-drivers/video_stream_opencv
 go back to opencv_ws and catkin_make
 run:
-source /home/user_name/opencv_ws/devel/setup.bash
+source /home/user_name/image_transport_ws/devel/setup.bash
 to open a publisher node where 0 is the number of the camera device and my_camera is the name of the camera node
  roslaunch video_stream_opencv camera.launch video_stream_provider:=0 # camera_name:=my_camera
 which produces
@@ -144,20 +144,23 @@ Running the April Tags ROS Nodes
 9. april tags simulation?
 https://github.com/xenobot-dev/apriltags_ros
 
+10. usb_cam-test.launch
+
 
 Everything set up
 in apriltags_ws
 roslaunch apriltags2_ros continuous_detection.launch
 in image_transport_ws
-roslaunch video_stream_opencv camera.launch
+roslaunch video_stream_opencv camera.launch video_stream_provider:=1
 in image_pipeline_ws
 ROS_NAMESPACE=camera rosrun image_proc image_proc
 in rqt_image_view_ws
 rosrun rqt_image_view rqt_image_view
 in usb_cam_ws
-roslaunch usb_cam usb_cam-test.launch
-in 
-
+./set_ntsc /dev/video1
+roslaunch usb_cam usb_cam-test.launch video_device:=1 camera_info_url:="file:///home/kristen/.ros/camera_info/usb_camera.yaml" camera_name:=camera
+in camera_calibration_ws
+rosrun camera_calibtion cameracalibrator.py --size 8x6 --square 0.30 image:=/camera/image_raw camera:=/camera camera_info_url:="file:///home/kristen/.ros/camera_info/usb_camera.yaml"
 
 
 Extra Information

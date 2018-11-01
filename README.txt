@@ -18,10 +18,12 @@ Calibration
 	1. using webcam
 	https://help.ubuntu.com/community/Webcam
 	2. figure out camera id using ls /dev/video*
-	3. git clone the video_stream_opencv to the apriltags_ws/src
+	4. make a new catkin_ws for opencv and make a src inside that new catkin_ws then catkin make
+	3. git clone the video_stream_opencv to the opencv_ws/src
 https://github.com/ros-drivers/video_stream_opencv
-go back to apriltags_ws and catkin_make
-run source /home/user_name/apriltags_ws/devel/setup.bash
+go back to opencv_ws and catkin_make
+run:
+source /home/user_name/opencv_ws/devel/setup.bash
 to open a publisher node where 0 is the number of the camera device and my_camera is the name of the camera node
  roslaunch video_stream_opencv camera.launch video_stream_provider:=0 # camera_name:=my_camera
 which produces

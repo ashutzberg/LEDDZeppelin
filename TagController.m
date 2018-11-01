@@ -1,8 +1,9 @@
 
-function TagController(tfSub)
+function TagController
 % Yaw is angle in x-y given from ROS (blimp to tag)
 % distance is the range displacement from blimp to tag in the x-y plane given from ROS
 % height is the vertical displacement from blimp to tag given from ROS
+[tfSub,imageSub] = initializeROS();
 
 V2thrust = 1/127 * (3.8) * (2) * 1 / 116.59; % Thrust converting factor
 d2r=pi/180;
@@ -43,7 +44,7 @@ Kd_dist=0.0658;
 
 while(1)
  
-[tagX, tagY, tagZ, tagYaw, tagLabels] = getTagPose(tfSub)
+[tagX, tagY, tagZ, tagYaw, tagLabels] = getTagPose(tfSub);
 
 range = sqrt(tagX^2 + tagY^2);              % Input from ROS
 zdisp = tagZ;               % Input Z height from ROS
@@ -53,13 +54,11 @@ yaw = tagYaw;                      %Input from ROS
 reference_yaw = pi;
 
 % Height of Tag in meters
-zdisp = height;
 h_tag = 2.45;           % the average height of the tag will be 8 feet, or about 2.45 meters
 reference_z = h_tag;
 
 % Height of blimp in meters
 h_blimp = zdisp + h_tag;
-
 
 
 % PID for z-axis (height)
@@ -72,7 +71,20 @@ end
 prev_error_z=error_z;%update error_z
 
 % PID for Yaw
-error_yaw = reference_yaw - yaw; % calc_yaw_error(reference_yaw,yaw)*d2r; so hopefully ROS team will give us angle of tag relative to blimp
+
+% Angle Wrapping ...
+%yaw = yaw + pi;
+
+
+error_yaw = reference_yaw - yaw;
+if error_yaw > pi
+    error_yaw  = error_yaw - 2*pi;
+end
+if error_yaw < -pi
+    error_yaw = error_yaw + 2*pi;
+end  
+
+
 [thrust_yaw,thrust_i_yaw] = PIDcontroller(Kp_yaw,Ki_yaw,Kd_yaw,error_yaw,prev_error_yaw,thrust_i_yaw,dt);
 thrust_yaw = thrust_yaw /V2thrust;
 prev_error_yaw=error_yaw;%update previous yaw_error

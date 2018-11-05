@@ -42,7 +42,6 @@ end
 
 % call classifier
 [tagX, tagY, tagZ, tagYaw, tagLabel] = getTagPose(tfSub)
-pause(2)
 
 % if no tags within vicinity, limit to number of attempts to poll
 % surroundings before starting spiral pattern

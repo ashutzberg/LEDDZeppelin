@@ -146,6 +146,9 @@ https://github.com/xenobot-dev/apriltags_ros
 
 10. usb_cam-test.launch
 
+11. mapviz? or rviz?
+https://github.com/swri-robotics/mapviz
+
 
 Everything set up
 in apriltags_ws
@@ -160,8 +163,7 @@ in usb_cam_ws
 ./set_ntsc /dev/video1
 roslaunch usb_cam usb_cam-test.launch video_device:=1 camera_info_url:="file:///home/kristen/.ros/camera_info/usb_camera.yaml" camera_name:=camera
 in camera_calibration_ws
-rosrun camera_calibtion cameracalibrator.py --size 8x6 --square 0.30 image:=/camera/image_raw camera:=/camera camera_info_url:="file:///home/kristen/.ros/camera_info/usb_camera.yaml"
-
+rosrun camera_calibtion cameracalibrator.py --size 8x6 --square 0.30 image:=/usb_cam/image_raw camera:=/usb_cam 
 
 Extra Information
 how to run ros

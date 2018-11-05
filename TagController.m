@@ -56,8 +56,8 @@ while(1)
  
 [tagX, tagY, tagZ, tagYaw, tagLabels] = getTagPose(tfSub);
 
-range = sqrt(tagX^2 + tagY^2);              % Input from ROS
-zdisp = tagZ;               % Input Z height from ROS
+range = sqrt(tagX^2 + tagY^2 + tagZ^2);              % Input from ROS
+zdisp = tagY;               % Input Z height from ROS
 yaw = tagYaw;                      %Input from ROS
 
 % Calculate yaw
@@ -83,7 +83,7 @@ prev_error_z=error_z;%update error_z
 % PID for Yaw
 
 % Angle Wrapping ...
-%yaw = yaw + pi;
+yaw = -yaw;
 
 
 error_yaw = reference_yaw - yaw;

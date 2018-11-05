@@ -12,7 +12,7 @@ for i = 1:WINDOW_SIZE
 end
 
 BUFFER_SIZE = 6;
-tags = zeros(1,8) - 1;
+tags = zeros(1,8);
 tag_label = -1;
 x = zeros(1,BUFFER_SIZE);
 y = zeros(1,BUFFER_SIZE);
@@ -23,7 +23,7 @@ yaw = zeros(1,BUFFER_SIZE);
 for i = 1:WINDOW_SIZE
     msg = message_buffer(i);
     tag = msg.Transforms.ChildFrameId;
-    tag_num = cell2mat(regexp(tag, '\d*', 'Match'))
+    tag_num = str2num(cell2mat(regexp(tag, '\d*', 'Match')));
     if tag_num <= 7 && tag_num >= 0
         tags(tag_num + 1) = tags(tag_num + 1) + 1;
     end
@@ -33,7 +33,7 @@ j = 1;
 for i = 1:WINDOW_SIZE
     msg = message_buffer(i);
     tag = msg.Transforms.ChildFrameId;
-    tag_num = cell2mat(regexp(tag, '\d*', 'Match'));
+    tag_num = str2num(cell2mat(regexp(tag, '\d*', 'Match')));
     % throw out erroneous detections by making sure that there have been
     % atleast 4 detections of the same tag within the last WINDOW_SIZE
     % messages
@@ -64,6 +64,7 @@ while i <= length(x)
         tagX = tagX + x(i);
     end
     count = count + 1;
+    i = i + 1;
 end
 tagX = tagX / count;
 i = 1;
@@ -74,6 +75,7 @@ while i <= length(y)
         tagY = tagY + y(i);
     end
     count = count + 1;
+    i = i + 1;
 end
 tagY = tagY / count;
 i = 1;
@@ -84,6 +86,7 @@ while i <= length(z)
         tagZ = tagZ + z(i);
     end
     count = count + 1;
+    i = i + 1;
 end
 tagZ = tagZ / count;
 i = 1;
@@ -94,5 +97,6 @@ while i <= length(yaw)
         tagYaw = tagYaw + yaw(i);
     end
     count = count + 1;
+    i = i + 1;
 end
 tagLabel = tag_label;

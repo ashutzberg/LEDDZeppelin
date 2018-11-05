@@ -8,12 +8,13 @@ function TagController
 
 
 % Object Creaation
-blimp = serial('ttyUSB0','BaudRate',19200,'InputBufferSize',4096);
+fclose(instrfindall);
+blimp = serial('/dev/ttyUSB0','BaudRate',19200,'InputBufferSize',4096);
 % Serial communication initialization
 fopen(blimp);
 
 %Initialize ROS
-[tfSub,imageSub] = initializeROS();
+[tfSub,imageSub] = initializeRos();
 
 V2thrust = 1/127 * (3.8) * (2) * 1 / 116.59; % Thrust converting factor
 d2r=pi/180;
@@ -43,22 +44,33 @@ Ki_z=0.0174;
 Kd_z=1.4704;
 
 % Heading Controller
-Kp_yaw=0.3910;
+%{
+Kp_yaw=0.3890;
 Ki_yaw=0;
 Kd_yaw=0.3840;
+%}
+Kp_yaw=0.025;
+Ki_yaw=0;
+Kd_yaw=0.0005;
 
 % Range Controller
+
 Kp_dist=0.0125;
 Ki_dist=1.0472e-04;
 Kd_dist=0.0658;
 
+%{
+Kp_dist=0.0125;
+Ki_dist=1.08e-4;
+Kd_dist=0.07;
+%}
 while(1)
  
-[tagX, tagY, tagZ, tagYaw, tagLabels] = getTagPose(tfSub);
+[tagX, tagY, tagZ, tagYaw, tagLabels] = getSingleTagPose(tfSub);
 
-range = sqrt(tagX^2 + tagY^2 + tagZ^2);              % Input from ROS
-zdisp = tagY;               % Input Z height from ROS
-yaw = tagYaw;                      %Input from ROS
+range = sqrt(tagX^2 + tagY^2 + tagZ^2)              % Input from ROS
+zdisp = tagY               % Input Z height from ROS
+yaw = tagYaw                      %Input from ROS
 
 % Calculate yaw
 reference_yaw = pi;

@@ -11,7 +11,7 @@ thetaTagtoBlimp = detectedTag.yaw;
 number = detectedTag.number;
 
 %knowns
-tagPose = tagLocs(number + 1);
+tagPose = tagLocs{number + 1};
 thetatg1 = tagPose(3); % -pi/2;  % theta of the tag relative to the global frame
 xtg1 = tagPose(1);     % x-coordinate of tag 1
 ytg1 = tagPose(2);     % y-coordinate of tag 1
@@ -50,15 +50,15 @@ blimpx_TRUE = blimpglobal_TRUE(1,3)
 blimpy_TRUE = blimpglobal_TRUE(2,3)
 blimbThetaGlobal_true = asin(blimpglobal_TRUE(2,1))
 
-figure
-plot(xtg1,ytg1,'rv')
-grid on;
-hold on
-plot(blimpx,blimpy,'g*')
-plot(blimpx_TRUE,blimpy_TRUE,'bl*')
-plot(0,0,'ko')
-pbaspect([1 1 1])
-legend('Tag 1','Measured Blimp Location','True Blimp Location','Global Origin','Location','Northeastoutside')
+% figure
+% plot(xtg1,ytg1,'rv')
+% grid on;
+% hold on
+% plot(blimpx,blimpy,'g*')
+% plot(blimpx_TRUE,blimpy_TRUE,'bl*')
+% plot(0,0,'ko')
+% pbaspect([1 1 1])
+% legend('Tag 1','Measured Blimp Location','True Blimp Location','Global Origin','Location','Northeastoutside')
 
 x = blimpx;
 y = blimpy;

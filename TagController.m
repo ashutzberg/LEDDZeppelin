@@ -15,8 +15,10 @@ fopen(blimp);
 
 %Initialize ROS
 [tfSub,imageSub] = initializeRos();
-
-V2thrust = 1/127 * (3.8) * (2) * 1 / 116.59; % Thrust converting factor
+%THis is the OG thrust value
+%V2thrust = 1/127 * (3.8) * (2) * 1 / 116.59; % Thrust converting factor
+%this is the new thrust value ...
+V2thrust = (1/127 * (3.8) * (2) * 1 / 116.59)*2.5;
 d2r=pi/180;
 dt=0.111;
 s1 = '$01'; s2 = ',SETM,'; b = ',';
@@ -70,7 +72,7 @@ Ki_dist=1.08e-4;
 Kd_dist=0.07;
 %}
 while(1)
- 
+ tic
 [tagX, tagY, tagZ, tagYaw, tagLabel] = getSingleTagPose(tfSub);
 if tagLabel ~= destinationTagLabel
     continue
@@ -172,5 +174,6 @@ cmd = strcat(s1,s2,l,b,r,b,t,b,t,b,side,b,'255') % this is the command to feed t
 fprintf(blimp,cmd);
 % oldPoints = visiblePoints;
 % setPoints(pointTracker, oldPoints);
+toc
 end
 end

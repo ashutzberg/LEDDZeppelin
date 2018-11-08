@@ -4,7 +4,7 @@ function [] = blimpManager()
 close all
 clear all 
 % Object Creaation
-blimp = serial('COM3','BaudRate',19200,'InputBufferSize',4096);
+blimp = serial('/dev/ttyUSB0','BaudRate',19200,'InputBufferSize',4096);
 % Serial communication initialization
 fopen(blimp);
 

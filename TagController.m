@@ -1,5 +1,5 @@
 
-function TagController
+function TagController(destinationTagLabel)
 % Yaw is angle in x-y given from ROS (blimp to tag)
 % distance is the range displacement from blimp to tag in the x-y plane given from ROS
 % height is the vertical displacement from blimp to tag given from ROS
@@ -9,7 +9,7 @@ function TagController
 
 % Object Creaation
 fclose(instrfindall);
-blimp = serial('/dev/ttyUSB0','BaudRate',19200,'InputBufferSize',4096);
+blimp = serial('/dev/ttyUSB1','BaudRate',19200,'InputBufferSize',4096);
 % Serial communication initialization
 fopen(blimp);
 
@@ -39,7 +39,12 @@ thrust_i_z=0;
 thrust_i_dist=0;
 
 % Height Controller
+%{
 Kp_z=1.3120/2;
+Ki_z=0.0174;
+Kd_z=1.4704;
+%}
+Kp_z=1.210/2;
 Ki_z=0.0174;
 Kd_z=1.4704;
 
@@ -66,11 +71,16 @@ Kd_dist=0.07;
 %}
 while(1)
  
-[tagX, tagY, tagZ, tagYaw, tagLabels] = getSingleTagPose(tfSub);
+[tagX, tagY, tagZ, tagYaw, tagLabel] = getSingleTagPose(tfSub);
+if tagLabel ~= destinationTagLabel
+    continue
+end
+
 
 range = sqrt(tagX^2 + tagY^2 + tagZ^2)              % Input from ROS
 zdisp = tagY               % Input Z height from ROS
 yaw = tagYaw                      %Input from ROS
+tagX
 
 % Calculate yaw
 reference_yaw = pi;
@@ -130,10 +140,10 @@ thrust_z_PWM=thrust_z+256;
 left_PWM =(thrust_x+256)+thrust_yaw;
 right_PWM=(thrust_x+256)-thrust_yaw;
 thrust_side = 255;
-if x > .2
-    thrust_side = 305;
-elseif x < -.2
-    thrust_side = 155;
+if tagX > .2
+    thrust_side = 355;
+elseif tagX < -.2
+    thrust_side = 105;
 end
 % Saturation for X-Y motor
 if (left_PWM>511)
@@ -158,7 +168,7 @@ end
 % Send commands
 t = int2str(thrust_z_PWM); l = int2str(left_PWM); r = int2str(right_PWM);
 side = int2str(thrust_side);
-cmd = strcat(s1,s2,l,b,r,b,t,b,t,b,'255',b,'255') % this is the command to feed the arduino controller ...
+cmd = strcat(s1,s2,l,b,r,b,t,b,t,b,side,b,'255') % this is the command to feed the arduino controller ...
 fprintf(blimp,cmd);
 % oldPoints = visiblePoints;
 % setPoints(pointTracker, oldPoints);

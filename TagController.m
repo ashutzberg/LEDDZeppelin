@@ -104,7 +104,7 @@ if error_yaw > pi
 end
 if error_yaw < -pi
     error_yaw = error_yaw + 2*pi;
-end  
+end
 
 
 [thrust_yaw,thrust_i_yaw] = PIDcontroller(Kp_yaw,Ki_yaw,Kd_yaw,error_yaw,prev_error_yaw,thrust_i_yaw,dt);
@@ -130,34 +130,34 @@ thrust_z_PWM=thrust_z+256;
 left_PWM =(thrust_x+256)+thrust_yaw;
 right_PWM=(thrust_x+256)-thrust_yaw;
 thrust_side = 255;
-%             if leftProfileFound
-%                 thrust_side = 305;
-%             elseif rightProfileFound
-%                 thrust_side = 155;
-%             end
+if x > .2
+    thrust_side = 305;
+elseif x < -.2
+    thrust_side = 155;
+end
 % Saturation for X-Y motor
 if (left_PWM>511)
-left_PWM=511;
+    left_PWM=511;
 end
 if (left_PWM<0)
-left_PWM=0;
+    left_PWM=0;
 end
 if (right_PWM>511)
-right_PWM=511;
+    right_PWM=511;
 end
 if (right_PWM<0)
-right_PWM=0;
+    right_PWM=0;
 end
 if (thrust_z_PWM<0)
-thrust_z_PWM=0;
+    thrust_z_PWM=0;
 end
 if (thrust_z_PWM>511)
-thrust_z_PWM=511;
+    thrust_z_PWM=511;
 end
 
 % Send commands
 t = int2str(thrust_z_PWM); l = int2str(left_PWM); r = int2str(right_PWM);
-%side = int2str(thrust_side);
+side = int2str(thrust_side);
 cmd = strcat(s1,s2,l,b,r,b,t,b,t,b,'255',b,'255') % this is the command to feed the arduino controller ...
 fprintf(blimp,cmd);
 % oldPoints = visiblePoints;

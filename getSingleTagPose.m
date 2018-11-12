@@ -7,9 +7,9 @@ tag_num = str2num(cell2mat(regexp(tag, '\d*', 'Match')));
 tag_label = tag_num;
 quat = msg.Transforms.Transform.Rotation;
 [~,yaw,~] = quat2angle([quat.W quat.X quat.Y quat.Z], 'XYZ');
-x = msg.Transforms.Transform.Translation.X;
-y = msg.Transforms.Transform.Translation.Y;
-z = msg.Transforms.Transform.Translation.Z;
+x = msg.Transforms.Transform.Translation.X
+y = msg.Transforms.Transform.Translation.Y
+z = msg.Transforms.Transform.Translation.Z
 
 tagX = x;
 tagY = y;

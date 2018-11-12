@@ -9,7 +9,7 @@ function TagController(destinationTagLabel)
 
 % Object Creaation
 fclose(instrfindall);
-blimp = serial('/dev/ttyUSB1','BaudRate',19200,'InputBufferSize',4096);
+blimp = serial('/dev/ttyUSB0','BaudRate',19200,'InputBufferSize',4096);
 % Serial communication initialization
 fopen(blimp);
 

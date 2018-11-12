@@ -9,7 +9,7 @@ function TagController(destinationTagLabel)
 
 % Object Creaation
 fclose(instrfindall);
-blimp = serial('/dev/ttyUSB0','BaudRate',19200,'InputBufferSize',4096);
+blimp = serial('/dev/ttyUSB1','BaudRate',19200,'InputBufferSize',4096);
 % Serial communication initialization
 fopen(blimp);
 
@@ -71,14 +71,20 @@ Kp_dist=0.0125;
 Ki_dist=1.08e-4;
 Kd_dist=0.07;
 %}
+loops = [0];
+ii=1;
 while(1)
  tic
 [tagX, tagY, tagZ, tagYaw, tagLabel] = getSingleTagPose(tfSub);
+loop76 = toc - loops[ii];
+ii++;
+loops = [loops, loop76];
 if tagLabel ~= destinationTagLabel
     continue
 end
-
-
+loop82_85 = toc - loops[ii];
+ii++;
+loops = [loops, loop82_85];
 range = sqrt(tagX^2 + tagY^2 + tagZ^2)              % Input from ROS
 zdisp = tagY               % Input Z height from ROS
 yaw = tagYaw                      %Input from ROS
@@ -97,7 +103,13 @@ h_blimp = zdisp + h_tag;
 
 % PID for z-axis (height)
 error_z=reference_z-h_blimp;
+loop88_103=6 = toc - loops[ii];
+ii++;
+loops = [loops, loop88_106];
 [thrust_z,thrust_i_z] = PIDcontroller(Kp_z,Ki_z,Kd_z,error_z,prev_error_z,thrust_i_z,dt);
+loop109 = toc - loops[ii];
+ii++;
+loops = [loops, loop109];
 thrust_z = thrust_z / V2thrust;
 if thrust_z>0
 thrust_z=thrust_z*0.8;
@@ -118,15 +130,32 @@ if error_yaw < -pi
     error_yaw = error_yaw + 2*pi;
 end
 
+loop113_133 = toc - loops[ii];
+ii++;
+loops = [loops, loop113_133];
 
 [thrust_yaw,thrust_i_yaw] = PIDcontroller(Kp_yaw,Ki_yaw,Kd_yaw,error_yaw,prev_error_yaw,thrust_i_yaw,dt);
+loop137 = toc - loops[ii];
+ii++;
+loops = [loops, loop137];
+
 thrust_yaw = thrust_yaw /V2thrust;
 prev_error_yaw=error_yaw;%update previous yaw_error
 
 % PID to Reduce Error Distance from Current Position to a Waypoint
 error_dist_previous = range-set_point_distance;
 error_dist = error_dist_previous;
+
+loop113_149 = toc - loops[ii];
+ii++;
+loops = [loops, loop113_149];
+
 [thrust_dist,thrust_i_dist] = PIDcontroller(Kp_dist,Ki_dist,Kd_dist,error_dist,prev_error_dist,thrust_i_dist,dt);
+
+loop153 = toc - loops[ii];
+ii++;
+loops = [loops, loop153];
+
 prev_error_dist=error_dist;
 thrust_dist=thrust_dist/V2thrust;
 if (thrust_dist<0)
@@ -166,14 +195,30 @@ end
 if (thrust_z_PWM>511)
     thrust_z_PWM=511;
 end
-
+loop159_198 = toc - loops[ii];
+ii++;
+loops = [loops, loop159_198];
 % Send commands
 t = int2str(thrust_z_PWM); l = int2str(left_PWM); r = int2str(right_PWM);
+loop202 = toc - loops[ii];
+ii++;
+loops = [loops, loop202];
 side = int2str(thrust_side);
 cmd = strcat(s1,s2,l,b,r,b,t,b,t,b,side,b,'255') % this is the command to feed the arduino controller ...
 fprintf(blimp,cmd);
+loop206_208 = toc - loops[ii];
+ii++;
+loops = [loops, loop206_208];
 % oldPoints = visiblePoints;
 % setPoints(pointTracker, oldPoints);
 toc
 end
+
+loopTotal = toc;
+loopEND = toc - loops[ii];
+ii++;
+loops = [loops, loopEND];
+loops/loopTotal
+disp('');
+loops = [0];
 end
